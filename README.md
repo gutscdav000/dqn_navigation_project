@@ -27,16 +27,37 @@ The task is episodic, and in order to solve the environment, your agent must get
     - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana.app.zip)
     - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86.zip)
     - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86_64.zip)
-    
-    (_For Windows users_) Check out [this link](https://support.microsoft.com/en-us/help/827218/how-to-determine-whether-a-computer-is-running-a-32-bit-version-or-64) if you need help with determining if your computer is running a 32-bit version or 64-bit version of the Windows operating system.
 
-    (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux_NoVis.zip) to obtain the environment.
+### Instructions for setting up environment in AWS
 
-2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. 
+1. First submit a ticket with amazon for a rate limit increase of all P and G instances in the region you will be using. Udacity provided a link for how you can build and configure your own compute instance; However the repository readme says their documentation is out of date and the no longer use it. Provided are 2 links: first the repository/documentation in question, and second the link to the amazon machine image which I am recommending the rate increase to use.
+ [repo](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)
+ [AMI aws link](https://aws.amazon.com/marketplace/pp/B077GCH38C)
+ 
+2. Once your request has been approved go to the AWS link above to create the EC2 compute instance you will be using. **Note: before doing this you must create a SSH key pair which can be done in the EC2 console. The Key pair link can be found in the console under Network & Security -> Key Pairs.**
 
-### Instructions
+3. after you have created your key and created the EC2 instance we will want to SSH into it. The following links provides you with detailed instructions for doing this with putty as well as mac + openshh. 
+[Connecting to Your Linux Instance from Windows Using PuTTY](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html)
+[Connect from Mac or Linux Using an SSH Client](https://docs.aws.amazon.com/quickstarts/latest/vmlaunch/step-2-connect-to-instance.html)
 
-Follow the instructions in `Navigation.ipynb` to get started with training your own agent!  
+4. Now that you have access to the environment we want to connect to a jupyter notebook. Since we have SSH'ed into the machine we have to perform an extra step to access it via the browser on our loca machine.
+- setup a password to access jupyter 
+```
+(ec2-instance)$ jupyter notebook password
+Enter password: 
+Verify password: 
+[NotebookPasswordApp] Wrote hashed password to /home/ubuntu/.jupyter/jupyter_notebook_config.json
+```
+- next start the jupyter notebook. **NOTE: we use nohup at the beggining and & at the end to stop the server from being killed if you logout.**
+```
+(ec2-instance)$ nohup jupyter notebook --no-browser --port=8888
+nohup: ignoring input and appending output to 'nohup.out'
+```
+- finally we create an SSH tunnel connection from the EC2 instance to your local machine.
+```
+(my-machine)$ ssh -i my-private-key.pem -N -f -L localhost:8888:localhost:8888 user-name@remote-hostname
+```
+
 
 ### (Optional) Challenge: Learning from Pixels
 
