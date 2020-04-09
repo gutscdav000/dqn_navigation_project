@@ -4,7 +4,7 @@
 
 # Project 1: Navigation
 
-### Introduction
+### Introduction / Project Details
 
 For this project, you will train an agent to navigate (and collect bananas!) in a large, square world.  
 
@@ -18,7 +18,7 @@ The state space has 37 dimensions and contains the agent's velocity, along with 
 - **`2`** - turn left.
 - **`3`** - turn right.
 
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes. 
 
 ### Getting Started
 
@@ -57,6 +57,34 @@ nohup: ignoring input and appending output to 'nohup.out'
 ```
 (my-machine)$ ssh -i my-private-key.pem -N -f -L localhost:8888:localhost:8888 user-name@remote-hostname
 ```
+
+
+# Report 
+
+### Learning Algorithm
+
+For this Project I used the standard DQN. For network arctitecture, a simple target network was used to prevent the model from chasing "moving target" Q values, and an experience replay that was sampled randomly to further learn from previous action state combinations. The neural networks themselves were rudimentary at best, they are 3 layer fully connected linear layers using rectified linear unit activation functions. For hyperparameters I used the following:
+
+| Name                     |  value                   |
+:-------------------------:|:-------------------------:
+ starting Epsilon          |  1.0
+ minimum Epsilon           |  0.01
+ Epsilon Decay             |  0.995
+ max number of episodes    |  2000, actual: 1416
+ max timesteps per episode |  1000
+ starting Epsilon          |  1.0
+
+I regret using this algorithm because it burned up all of my workspace GPU time, and cost me about a day of compute time on AWS. I knew the oscillations would be attrocious; However, I did not account for the compute time required to train a DQN. I [read](https://medium.com/@parsa_h_m/deep-reinforcement-learning-dqn-double-dqn-dueling-dqn-noisy-dqn-and-dqn-with-prioritized-551f621a9823) that there were far fewer oscillations with the double DQN and the dueling DQN, but they did not as effectively maximize the Q values for which reason I stuck with the DQN. 
+
+###  Plot of Rewards
+
+![](training_episodes.png)
+
+This graph does a great job of illustrating the oscillations I mentioned above and why training the vanilla DQN was so computationally expensive. 
+
+### Ideas for future work
+
+I have many Ideas for future work. First, I am going to try the double DQN because I am interested in the trade off between minimization of the oscilations and overall maximization of the Q values. Next I will try the prioritized experience replay because in my reading I have gleaned that it better maximizes the q values. Finally I will combine the two algorithms to see if they achieve greater performance together rather than separate.
 
 
 ### (Optional) Challenge: Learning from Pixels

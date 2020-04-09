@@ -71,7 +71,8 @@ class Agent():
 
         # Epsilon-greedy action selection
         if random.random() > eps:
-            return np.argmax(action_values.cpu().data.numpy())
+            # this is where we would implement Double DQN.
+            return np.argmax(action_values.cpu().data.numpy()) 
         else:
             return random.choice(np.arange(self.action_size))
 
